@@ -4,11 +4,11 @@
             <form action="admin/login" method="POST" id="formulario-login" class="formulario align-self-center">
                 <div class="form-group">
                     <label for="exampleInputEmail1"> Matricula</label>
-                    <input name="matricula" id="matricula" type="number" class="form-control" maxlength="10" aria-describedby="emailHelp" placeholder="Matricula">
+                    <input name="matricula" id="matricula" type="number" :v-model="matricula" class="form-control" maxlength="10" aria-describedby="emailHelp" placeholder="Matricula">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Senha</label>
-                    <input name="senha" type="password" id="senha" class="form-control" placeholder="Senha">
+                    <input name="senha" type="password" id="senha" :v-model="senha" class="form-control" placeholder="Senha">
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit" id="buton-enviar" value="buton-enviar">Entrar</button>
@@ -28,7 +28,6 @@
                 <button class="btn btn-primary" id="buton-cadastrar" value="Enviar">Cadastre-se</button>
             </div>
         </section>
-        <router-link to="/cadastro">Cadastro</router-link>
     </div>
 </template>
 
@@ -40,7 +39,7 @@ export default {
 
 <style>
     #container{
-    padding-top: 100px;
+    padding-top: 40px;
 }
 
 .primeiro-container{

@@ -7,32 +7,28 @@
             <div id="container-img">
                 <img src="/img/cadastro.svg" id="img-cadastro" alt="">
             </div>
-             <form action="/admin/cadastro" method="POST" class="formulario align-self-center" id="formulario">
+             <form action="/admin/cadastro" method="POST" class="formulario align-self-center" id="formulario" @submit="enviarFormulario($event)">
             <div>
-                <input name="date" id="date" type="date">
+                <input name="date" id="date" v-model="date" type="date">
             </div>
             <div>
                 <p>Deposite aqui o link</p>
-                <input id="link" name="link" class="form-control row" type="text">
+                <input id="link" name="link" :v-model="link" class="form-control row" type="text">
             </div>
             <div class="form-group row">
                 <p>Selecione os Projetos</p>
-                <select class="form-control" id="projeto" name="projeto">
+                <select class="form-control" id="projeto" :v-model="projeto" name="projeto">
                     <option selected value="">Selecione</option>
                     <option name="projeto" value="Projeto Sigip">Projeto Sigip</option>
-                    <option name="projeto" value="Projeto Sentinela">Projeto Sentinela</option>
-                    <option name="projeto" value="Projeto SGE">Projeto SGE</option>
-                    <option name="projeto" value="Projeto Hydra">Projeto Hydra</option>
-                    <option name="projeto" value="Projeto Mop">Projeto Mop</option>
                 </select>
             </div>
             <div class="form-group row">
                 <label for="exampleFormControlTextarea1">Tarefas</label>
-                <textarea name="tarefa" id="tarefa" class="form-control" rows="3"></textarea>
+                <textarea name="tarefa" id="tarefa" :v-model="tarefa" class="form-control" rows="3"></textarea>
             </div>
             <div class="buttons">
                 <button type="reset" id="buton-excluir" class="btn btn-primary btn-lg">Excluir</button>
-                <button type="button" id="buton-cadastrar" class="btn btn-secondary btn-lg" onclick="function(event)">Cadastrar</button>
+                <button type="button" class="btn btn-secondary btn-lg">Cadastrar</button>
             </div>
         </form>
         </div>
@@ -49,6 +45,19 @@ import TabelaCadastrada from './TabelaCadastrada.vue';
         name: 'CadastroTask',
         components:{
             TabelaCadastrada,
+        },
+        data(){
+            return{
+                projeto: null,
+            }
+        },
+        methods:{
+            enviarFormulario(e){
+                e.preventDefault
+
+                var link = this.link 
+                console.log(link)
+            }
         }
     }
 </script>
