@@ -7,34 +7,34 @@
             <div id="container-img">
                 <img src="/img/cadastro.svg" id="img-cadastro" alt="">
             </div>
-             <form action="/admin/cadastro" method="POST" class="formulario align-self-center" id="formulario" @submit="enviarFormulario($event)">
-            <div>
-                <input name="date" id="date" v-model="date" type="date">
-            </div>
-            <div>
-                <p>Deposite aqui o link</p>
-                <input id="link" name="link" :v-model="link" class="form-control row" type="text">
-            </div>
-            <div class="form-group row">
-                <p>Selecione os Projetos</p>
-                <select class="form-control" id="projeto" :v-model="projeto" name="projeto">
-                    <option selected value="">Selecione</option>
-                    <option name="projeto" value="Projeto Sigip">Projeto Sigip</option>
-                </select>
-            </div>
-            <div class="form-group row">
-                <label for="exampleFormControlTextarea1">Tarefas</label>
-                <textarea name="tarefa" id="tarefa" :v-model="tarefa" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="buttons">
-                <button type="reset" id="buton-excluir" class="btn btn-primary btn-lg">Excluir</button>
-                <button type="button" class="btn btn-secondary btn-lg">Cadastrar</button>
-            </div>
-        </form>
-        </div>
-        <div class="table">
-             <TabelaCadastrada/>
-        </div>
+            <form class="formulario align-self-center" id="formulario" v-on:submit="enviarFormulario($event)">
+                <div>
+                    <input name="date" id="date" v-model="date" type="date">
+                </div>
+                <div>
+                    <p>Deposite aqui o link</p>
+                    <input id="link" name="link" v-model="link" class="form-control row" type="text">
+                </div>
+                <div class="form-group row">
+                    <p>Selecione os Projetos</p>
+                    <select class="form-control" id="projeto" v-model="projeto" name="projeto">
+                        <option selected value="">Selecione</option>
+                        <option v-for="projeto in projeto" :key="projeto.id" :value="projeto.projeto">{{projeto.projeto}}</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label for="exampleFormControlTextarea1">Tarefas</label>
+                    <textarea name="tarefa" id="tarefa" v-model="tarefa" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="buttons">
+                    <button type="reset" id="buton-excluir" class="btn btn-primary btn-lg">Excluir</button>
+                    <button type="submit" id="buton-cadastrar" class="btn btn-secondary btn-lg">Cadastrar</button>
+                </div>
+            </form>
+     </div>
+    <div class="table">
+            <TabelaCadastrada/>
+    </div>
     </div>
 </template>
 
@@ -48,16 +48,42 @@ import TabelaCadastrada from './TabelaCadastrada.vue';
         },
         data(){
             return{
-                projeto: null,
+                projetos: null,
             }
         },
         methods:{
-            enviarFormulario(e){
-                e.preventDefault
+            async getProjetos(){
+                const req  = await fetch("http://localhost:3000/crud");
+                const data = await req.json();
+                this.projetos = data;
+                console.log(this.projetos)
+            },
+            async enviarFormulario(e){
+                e.preventDefault()
 
-                var link = this.link 
-                console.log(link)
-            }
+                const data = {
+                    date: this.date,
+                    link: this.link,
+                    tarefa: this.tarefa,
+                    projetos: this.projetos,  
+                }
+
+                const dataJson = JSON.stringify(data);
+
+                const req = await fetch("http://localhost:3000/Tarefas",{
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: dataJson
+                }); 
+
+                const res = await req.json();
+
+                console.log(res);
+
+            },
+        },
+        mounted(){
+            this.getProjetos()
         }
     }
 </script>

@@ -11,12 +11,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr v-for="projeto in projetos" :key="projeto.id">
                 <td>usuario</td>
-                <td>projet</td>
-                <td>tarefa</td>
-                <td>http://localhost:8080/cadastro</td>
-                <td>09/08/2022</td>
+                <td>{{projeto.projeto}}</td>
+                <td>{{projeto.tarefa}}</td>
+                <td>{{projeto.link}}</td>
+                <td>{{projeto.date}}</td>
             </tr>
         </tbody>
     </table>
@@ -24,8 +24,27 @@
 </template>
 
 <script>
+
 export default {
-    name: "TabelaCadastrada"
+    name: "TabelaCadastrada",
+    data(){
+        return {
+            projetos: null,
+
+        }
+    },
+    methods:{
+        async getTarefa(){
+            const req  = await fetch("http://localhost:3000/tarefa");
+            const data = await req.json();
+            this.projetos = data;
+            
+            console.log(this.projetos)
+        }
+    },
+    mounted(){
+        this.getTarefa();
+    }
 }
 </script>
 
