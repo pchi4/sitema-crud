@@ -13,33 +13,34 @@
                 </div>
                 <div>
                     <p>Deposite aqui o link</p>
-                    <input id="link" name="link" v-model="link" class="form-control row" type="text">
+                    <input id="link" name="link" v-model="link" class="form-control row" type="text" placeholder="Deposite seu link aqui">
                 </div>
                 <div class="form-group row">
                     <p>Selecione os Projetos</p>
                     <select class="form-control" id="projeto" v-model="projeto" name="projeto">
                         <option selected value="">Selecione</option>
-                        <option v-for="projeto in projeto" :key="projeto.id" :value="projeto.projeto">{{projeto.projeto}}</option>
+                        <option v-for="projeto in projetos" :key="projeto.id" :value="projeto.projeto">{{projeto.projeto}}</option>
                     </select>
                 </div>
                 <div class="form-group row">
                     <label for="exampleFormControlTextarea1">Tarefas</label>
-                    <textarea name="tarefa" id="tarefa" v-model="tarefa" class="form-control" rows="3"></textarea>
+                    <textarea name="tarefa" id="tarefa" v-model="tarefa" class="form-control" rows="3" placeholder="Adicione sua tarefa"></textarea>
                 </div>
                 <div class="buttons">
                     <button type="reset" id="buton-excluir" class="btn btn-primary btn-lg">Excluir</button>
-                    <button type="submit" id="buton-cadastrar" class="btn btn-secondary btn-lg">Cadastrar</button>
+                    <button type="submit" v-on:click="cadastrarCad" id="buton-cadastrar" class="btn btn-secondary btn-lg">Cadastrar</button>
                 </div>
             </form>
      </div>
     <div class="table">
-            <TabelaCadastrada/>
+        <TabelaCadastrada/>
     </div>
     </div>
 </template>
 
 <script>
 import TabelaCadastrada from './TabelaCadastrada.vue';
+import Swal from 'sweetalert2';
 
     export default {
         name: 'CadastroTask',
@@ -53,7 +54,7 @@ import TabelaCadastrada from './TabelaCadastrada.vue';
         },
         methods:{
             async getProjetos(){
-                const req  = await fetch("http://localhost:3000/crud");
+                const req  = await fetch("http://localhost:3000/projeto");
                 const data = await req.json();
                 this.projetos = data;
                 console.log(this.projetos)
@@ -65,12 +66,12 @@ import TabelaCadastrada from './TabelaCadastrada.vue';
                     date: this.date,
                     link: this.link,
                     tarefa: this.tarefa,
-                    projetos: this.projetos,  
+                    projeto: this.projeto,  
                 }
 
                 const dataJson = JSON.stringify(data);
 
-                const req = await fetch("http://localhost:3000/Tarefas",{
+                const req = await fetch("http://localhost:3000/tarefa",{
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: dataJson
@@ -79,8 +80,35 @@ import TabelaCadastrada from './TabelaCadastrada.vue';
                 const res = await req.json();
 
                 console.log(res);
-
             },
+            deleteCad(){
+                 Swal.fire({
+                    title: 'OPPS',
+                    text:   "wow",
+                    icon: 'warning',
+                });
+            },
+            cadastrarCad(){
+                Swal.fire({
+                    title: 'Voce tem certeza?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonColor: '#d33',
+                    confirmButtonColor: '#3085d6',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title:'Cadastrado com sucesso',
+                            icon: 'success'
+                        })
+
+                        this.enviarFormulario();
+                    }
+                })
+                    setTimeout(()=>{
+                        this.$router.go(); 
+                    }, 2000);
+            } 
         },
         mounted(){
             this.getProjetos()
@@ -91,7 +119,7 @@ import TabelaCadastrada from './TabelaCadastrada.vue';
 <style scoped>
     
 .container{
-    width: 1500px;
+    width: 1200px;
     display: flex;
     height: 513px;
     justify-content: space-around;
@@ -125,13 +153,13 @@ import TabelaCadastrada from './TabelaCadastrada.vue';
     font-size: 24px;
 }
 
-a {
-     color: inherit;
+a{
+    color: inherit;
 } 
 
- li{
+li{
     text-decoration: none;
- }
+}
     
 a:hover{
     color: yellow;
@@ -157,7 +185,6 @@ h1{
 #date{
     width: 200px;
     font-size: 16px;
-    border-radius: 15px;
     margin: 10px;
     margin-left: 65%;
 }

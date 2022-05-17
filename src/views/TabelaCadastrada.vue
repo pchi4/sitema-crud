@@ -3,20 +3,22 @@
     <table id="myTable" class="table table-dark table-striped">
         <thead>
             <tr>
-                <th scope="col">Usuario</th>
+                <th scope="col">N° do projeto</th>
                 <th scope="col">Projeto</th>
                 <th scope="col">Tarefa</th>
                 <th scope="col">Link das Tarefas</th>
                 <th scope="col">Periodo</th>
+                <th scope="col">Ações</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="projeto in projetos" :key="projeto.id">
-                <td>usuario</td>
+                <td>{{projeto.id}}</td>
                 <td>{{projeto.projeto}}</td>
                 <td>{{projeto.tarefa}}</td>
                 <td>{{projeto.link}}</td>
                 <td>{{projeto.date}}</td>
+                <td><button v-on:click="deleteCad(projeto.id)">delete</button></td>
             </tr>
         </tbody>
     </table>
@@ -24,13 +26,13 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 
 export default {
     name: "TabelaCadastrada",
     data(){
         return {
             projetos: null,
-
         }
     },
     methods:{
@@ -40,6 +42,32 @@ export default {
             this.projetos = data;
             
             console.log(this.projetos)
+        },
+        deleteCad(id){
+            Swal.fire({
+                    title: 'Voce tem certeza?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonColor: '#d33',
+                    confirmButtonColor: '#3085d6',
+            }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title:'Cadastrado com sucesso',
+                            icon: 'success'
+                        });
+
+                        const req = fetch(`http://localhost:3000/tarefa/${id}`,{
+                            method: "DELETE"
+                        });
+
+                        const res = req.json();
+                        console.log(res);
+
+                        this.getTarefa();
+                    }
+                })
+                 setTimeout(()=>{this.$router.go();},2000);
         }
     },
     mounted(){
@@ -49,7 +77,7 @@ export default {
 </script>
 
 <style scoped>
-   .grid {
+.grid {
     align-items: center;
     padding: 50px;
     text-align: center;

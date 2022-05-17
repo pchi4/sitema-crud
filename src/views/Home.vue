@@ -56,11 +56,11 @@ export default {
 </script>
 
 <style scoped>
-    #titulo{
-        padding-top: 120px;
-        text-align: center;
-        font-weight:bold;
-    }
+#titulo{
+    padding-top: 120px;
+    text-align: center;
+    font-weight:bold;
+}
 
     
 .Vector{
